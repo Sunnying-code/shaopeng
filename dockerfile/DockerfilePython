@@ -1,0 +1,10 @@
+FROM python:3
+
+WORKDIR /usr/src/app
+
+COPY dockerfile/requirements.txt /home
+RUN pip3 install  -i https://pypi.tuna.tsinghua.edu.cn/simple --no-cache-dir -r /home/requirements.txt
+
+RUN pip3 install cassandra-driver
+
+CMD [ "python", "./your-daemon-or-script.py" ]

@@ -1,0 +1,37 @@
+version: '2'
+services:
+  web:
+    build:
+      dockerfile: dockerfile/DockerfilePython
+      context: .
+    ports:
+    - "5000:5000"
+    command: python /home/peng/web/app.py
+#    command: tail -f /home/peng/web/app.py
+
+    volumes:
+      - "/home/peng/:/home/peng/"
+    depends_on:
+      - cassandra
+    networks:
+      - app_net
+
+  cassandra:
+    container_name: some-cassandra
+    image: cassandra
+    volumes:
+      - './log/cassandra/data:/var/lib/cassandra/data'
+      - './log/cassandra/commitlog:/var/lib/cassandra/commitlog'
+    ports:
+      - '7000:7000'
+      - '7001:7001'
+      - '7199:7199'
+      - '9042:9042'
+      - '9160:9160'
+      - '9404:9404'
+    networks:
+      - app_net
+
+networks:
+  app_net:
+    driver: bridge
